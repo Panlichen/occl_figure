@@ -37,8 +37,8 @@ data_dict = {
 }
 
 color_dict = {
-    legends[0]: (33/255, 158/255, 188/255),
-    legends[1]: (255/255, 158/255, 2/255),
+    legends[0]: (255/255, 158/255, 2/255),
+    legends[1]: (33/255, 158/255, 188/255),
 }
 
 def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, legends_loc="best"):
@@ -49,13 +49,13 @@ def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, legends_loc="bes
     for legend in legends:
         plot_data_dict.setdefault(legend, dict()).setdefault(
             "avg",
-            np.array([np.mean(rewards)
-                     for rewards in data_dict[legend].values()])
+            np.array([np.mean(data_list)
+                     for data_list in data_dict[legend].values()])
         )
         plot_data_dict.setdefault(legend, dict()).setdefault(
             "stderr",
-            np.array([np.std(rewards)
-                     for rewards in data_dict[legend].values()])
+            np.array([np.std(data_list)
+                     for data_list in data_dict[legend].values()])
         )
     
     num_bar = len(legends)
@@ -78,6 +78,6 @@ def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, legends_loc="bes
 
 if __name__ == "__main__":
     for the_data_set in data_set:
-        figame = "nccl_extra_"+the_data_set+".pdf"
-        print(figame)
-        plot_bar_avg_errbar(data_dict[the_data_set], "figures_nccl_extra/"+figame, (5, 2.8), 0.15)
+        figname = "nccl_extra_"+the_data_set+".pdf"
+        print(figname)
+        plot_bar_avg_errbar(data_dict[the_data_set], "figures_nccl_extra/"+figname, (5, 2.8), 0.15)

@@ -43,13 +43,13 @@ def plot_bar_avg_errbar_text(data_dict, figname, figsize, bar_width, legends_loc
     for legend in legends:
         plot_data_dict.setdefault(legend, dict()).setdefault(
             "avg",
-            np.array([np.mean(rewards)
-                     for rewards in data_dict[legend].values()])
+            np.array([np.mean(data_list)
+                     for data_list in data_dict[legend].values()])
         )
         plot_data_dict.setdefault(legend, dict()).setdefault(
             "stderr",
-            np.array([np.std(rewards)
-                     for rewards in data_dict[legend].values()])
+            np.array([np.std(data_list)
+                     for data_list in data_dict[legend].values()])
         )
     
     num_bar = len(legends)
