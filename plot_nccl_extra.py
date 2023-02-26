@@ -8,37 +8,43 @@ import matplotlib
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 
-legends = ["128B", "128KB", "128MB"]
-x_labels = ["Read SQE", "Extra Overheads", "Write CQE"]
+legends = ["NCCL", "OCCL"]
+x_labels = ["End-to-end Latency", "Core Execution Time"]
 
-time = {
-    legends[0]: {
-        x_labels[0]: [5.21, 5.13, 5.09, 5.29, 5.12],
-        x_labels[1]: [1.21, 1.21, 1.21, 1.21, 1.21],
-        x_labels[2]: [1.99, 1.99, 1.99, 1.98, 1.98]
+data_set = ["AG_4K", "RS_4M"]
+
+data_dict = {
+    data_set[0]: {
+        legends[0]: {
+            x_labels[0]: [44.61, 44.94, 45.48, 45.71, 45.01],
+            x_labels[1]: [43.39, 38.24, 40.34, 38.58, 38.06, 37.75, 37.99, 38.05, 38.63, 45.07, 39.18, 37.85, 38.91, 38.79, 42.71, 37.79, 38.47, 38.36, 38.09]
+        },
+        legends[1]: {
+            x_labels[0]: [48.91, 49.7, 49.83, 49.31],
+            x_labels[1]: [38.06, 39.22, 39.44, 38.68, 39.13]
+        }
     },
-    legends[1]: {
-        x_labels[0]: [5.95, 5.11, 5.86, 5.88, 5.87, 4.91, 5.92, 4.65, 4.83, 4.48],
-        x_labels[1]: [1.26, 1.26, 1.25, 1.25, 1.26, 1.26, 1.25, 1.26, 1.26, 1.26],
-        x_labels[2]: [1.93, 1.92, 1.88, 1.91, 1.89]
-    },
-    legends[2]: {
-        x_labels[0]: [5.69, 10.75, 12.93, 12.97, 7.21, 6.97, 14.00, 10.66, 10.84, 8.56],
-        x_labels[1]: [1.56, 1.60, 1.61, 1.63, 1.63, 1.58, 1.63, 1.64, 1.61, 1.61],
-        x_labels[2]: [2.76, 2.83, 6.85, 6.84, 6.71]
+    data_set[1]: {
+        legends[0]: {
+            x_labels[0]: [855.8, 851.7, 856.9, 856.3],
+            x_labels[1]: [852.527, 849.647, 846.927, 851.471, 838.703]
+        },
+        legends[1]: {
+            x_labels[0]: [852.4, 846.6, 853.1, 853.3, 853.8],
+            x_labels[1]: [818.8, 830.21, 832.81, 844.69, 822.49, 843.29, 832.74, 828.89, 821.09, 805.16]
+        }
     },
 }
 
 color_dict = {
-    legends[0]: (144/255, 201/255, 231/255),
-    legends[1]: (33/255, 158/255, 188/255),
-    legends[2]: (19/255, 103/255, 131/255)
+    legends[0]: (33/255, 158/255, 188/255),
+    legends[1]: (255/255, 158/255, 2/255),
 }
 
-def plot_bar_avg_errbar_text(data_dict, figname, figsize, bar_width, legends_loc="best"):
+def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, legends_loc="best"):
     plt.close("all")
     plt.figure(1, figsize=figsize)
-    
+
     plot_data_dict = {}
     for legend in legends:
         plot_data_dict.setdefault(legend, dict()).setdefault(
@@ -60,20 +66,18 @@ def plot_bar_avg_errbar_text(data_dict, figname, figsize, bar_width, legends_loc
         plt.bar(pos,plot_data_dict[legend]["avg"], bar_width,
                 yerr=plot_data_dict[legend]["stderr"], error_kw=error_attri,
                 color=color_dict[legend])
-        for a, b in zip (pos, plot_data_dict[legend]["avg"]):
-            plt.text(a, b+0.05, "%.1f" % b, ha='left', va='bottom', fontsize=13)
         
     plt.ylabel("Time (us)", size="16")
     plt.xticks(x_pos, x_labels)
     plt.legend(legends, prop={'size': '17'}, loc=legends_loc)
-    plt.tick_params(axis='y', labelsize='16')
-    plt.tick_params(axis='x', labelsize='20')
+    plt.tick_params(axis='y', labelsize='14')
+    plt.tick_params(axis='x', labelsize='16')
     plt.tight_layout()
     plt.savefig(figname)
     plt.show()
 
-
 if __name__ == "__main__":
-    plot_bar_avg_errbar_text(time, "figures_split/time_split.pdf", (10, 2.8), 0.2, "upper center")
-
-    
+    for the_data_set in data_set:
+        figame = "nccl_extra_"+the_data_set+".pdf"
+        print(figame)
+        plot_bar_avg_errbar(data_dict[the_data_set], "figures_nccl_extra/"+figame, (5, 2.8), 0.15)
