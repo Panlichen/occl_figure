@@ -12,8 +12,8 @@ legends = ["NCCL Bandwidth", "OCCL Bandwidth", "NCCL Latency", "OCCL Latency"]
 x_labels = ["512", "1K", "2K", "4K", "8K", "16K", "32K", "64K", "128K", "256K",
             "512K", "1M", "2M", "4M", "8M", "16M", "32M", "64M", "128M", "256M", "512M", "1G"]
 
-# dataset = ["2080ti-server, 4 GPUs", "3090-server, 8 GPUs", "3080ti-server 8 GPUs"]
-dataset = ["16_4card", "27_8card", "28_8card"]
+dataset = ["2080ti-server, 4 GPUs", "3090-server, 8 GPUs", "3080ti-server 8 GPUs"]
+# dataset = ["16_4card", "27_8card", "28_8acrd"]
 func = ["AR", "AG", "RS", "B", "R"]
 
 data_dict = {
@@ -1510,55 +1510,42 @@ hatch_dict = {
     legends[1]: "\\"
 }
 
-def plot_line_bar(data_dict, figname, figsize, bar_width, the_data_set, the_func, legends_loc="best", y_nbins=None, hline=False):
-    plt.close("all")
-    if (the_func == "R"):
-        plt.figure(1, figsize=(11, 3.4))
-    else:
-        plt.figure(1, figsize=figsize) # (11, 4.1)
-
-    slice_num = 13
+def plot_line_bar(data_dict, figlabel, figsize, bar_width, legends_loc="best", y_nbins=None, hline=False):
+    plt.figure(figlabel, figsize=figsize) # (11, 4.1)
 
     plot_bar_data_dict = {}
     plot_line_data_dict = {}
     for i, legend in enumerate(legends):
         if i < 2: # bar
-            l = [np.mean(data_list)
-                        for data_list in data_dict[legend].values()]
             plot_bar_data_dict.setdefault(legend, dict()).setdefault(
                 "avg",
-                np.array(l[:slice_num])
+                np.array([np.mean(data_list)
+                        for data_list in data_dict[legend].values()])
             )
-            l = [np.std(data_list)
-                        for data_list in data_dict[legend].values()]
             plot_bar_data_dict.setdefault(legend, dict()).setdefault(
                 "stderr",
-                np.array(l[:slice_num])
+                np.array([np.std(data_list)
+                        for data_list in data_dict[legend].values()])
             )
             # print(legend, plot_bar_data_dict[legend])
         else:
-            l = [np.mean(data_list)
-                        for data_list in data_dict[legend].values()]
             plot_line_data_dict.setdefault(legend, dict()).setdefault(
                 "avg",
-                np.array(l[:slice_num])
+                np.array([np.mean(data_list)
+                        for data_list in data_dict[legend].values()])
             )
-            l = [np.std(data_list)
-                        for data_list in data_dict[legend].values()]
             plot_line_data_dict.setdefault(legend, dict()).setdefault(
                 "stderr",
-                np.array(l[:slice_num])
+                np.array([np.std(data_list)
+                        for data_list in data_dict[legend].values()])
             )
 
     # 提前设置：
-    x_labels_slice = x_labels[:slice_num]
-    x_pos = np.array([i for i in range(len(x_labels_slice))])
-    if (the_func == "R"):
-        plt.xlabel("Buffer Size (B)", size='24')
-    plt.xticks(x_pos, x_labels_slice) #, rotation=5
-    plt.tick_params(axis='x', labelsize='17')
-    y_labelsize = '16'
-    plt.tick_params(axis='y', labelsize=y_labelsize)
+    x_pos = np.array([i for i in range(len(x_labels))])
+    plt.xlabel("Buffer Size (B)", size='13')
+    plt.xticks(x_pos, x_labels, rotation=5)
+    plt.tick_params(axis='x', labelsize='10')
+    plt.tick_params(axis='y', labelsize='14')
 
     # 先画bar
     error_attri = dict(capsize=2)
@@ -1571,8 +1558,7 @@ def plot_line_bar(data_dict, figname, figsize, bar_width, the_data_set, the_func
                 plt.bar(plot_bar.calc_bar_pos(num_bar, x_pos, i, bar_width), plot_bar_data_dict[legend]["avg"], bar_width, yerr=plot_bar_data_dict[legend]["stderr"],
                         error_kw=error_attri, fill=False, hatch=hatch_dict[legend], edgecolor=color_dict[legend], zorder=10)
             )
-    if (the_data_set == "16_4card"):
-        plt.ylabel("Bandwidth (GB/s)", size="21")
+    plt.ylabel("Algorithm Bandwidth (GB/s)", size="13")
     plt.yscale("log")
 
     plt.twinx()
@@ -1584,24 +1570,25 @@ def plot_line_bar(data_dict, figname, figsize, bar_width, the_data_set, the_func
             lines.append(
                 plt.errorbar(x_pos, plot_line_data_dict[legend]["avg"], yerr=plot_line_data_dict[legend]["stderr"], capsize=2, color=color_dict[legend], zorder=100)
             )
-    if (the_data_set == "27_8card"):
-        plt.ylabel("Latency (us)", size="22")
-    plt.tick_params(axis='y', labelsize=y_labelsize)
+    plt.ylabel("End-to-end Latency (us)", size="12")
     plt.yscale("log")
 
     # 共用的操作、参数
     plt.legend(bars+lines, legends,
-               loc=legends_loc, prop={'size': '16'})
-    plt.tight_layout()
-    plt.savefig(figname)
-    plt.show()
+               loc=legends_loc, prop={'size': '12'})
 
 if __name__ == "__main__":
 
     # dataset = ["28_8card"]
-    func = ["R"]
+    # func = ["AR"]
     for the_data_set in dataset:
+
+        plt.close("all")
+        figname = "figures_nccl_together/nccl_"+the_data_set+".pdf"
+        print(figname)
+
         for the_func in func:
-            figname = "nccl_"+the_data_set+"_"+the_func+".pdf"
-            print(figname)
-            plot_line_bar(data_dict[the_data_set][the_func], "figures_nccl/"+figname, (11, 3.3), 0.33, the_data_set, the_func)
+            plot_line_bar(data_dict[the_data_set][the_func], the_func, (11, 3.1), 0.3)
+        plt.tight_layout()
+        plt.savefig(figname)
+        plt.show()
