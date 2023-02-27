@@ -61,7 +61,7 @@ def plot_bar_avg_errbar_text(data_dict, figname, figsize, bar_width, legends_loc
                 yerr=plot_data_dict[legend]["stderr"], error_kw=error_attri,
                 color=color_dict[legend])
         for a, b in zip (pos, plot_data_dict[legend]["avg"]):
-            plt.text(a, b+0.05, "%.1f" % b, ha='left', va='bottom', fontsize=13)
+            plt.text(a, b+0.05, "%.1f" % b, ha='center', va='bottom', fontsize=16)
         
     plt.ylabel("Time (us)", size="16")
     plt.xticks(x_pos, x_labels)

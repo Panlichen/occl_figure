@@ -41,7 +41,7 @@ color_dict = {
     legends[1]: (33/255, 158/255, 188/255),
 }
 
-def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, legends_loc="best"):
+def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, the_data_set, legends_loc="lower center"):
     plt.close("all")
     plt.figure(1, figsize=figsize)
 
@@ -66,10 +66,16 @@ def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, legends_loc="bes
         plt.bar(pos,plot_data_dict[legend]["avg"], bar_width,
                 yerr=plot_data_dict[legend]["stderr"], error_kw=error_attri,
                 color=color_dict[legend])
+        for a, b in zip (pos, plot_data_dict[legend]["avg"]):
+            plt.text(a, b+0.05, "%.1f" % b, ha='center', va='bottom', fontsize=14)
         
     plt.ylabel("Time (us)", size="16")
+    if (the_data_set == data_set[0]):
+        plt.ylim(0, np.max(plot_data_dict[legends[0]]["avg"]) * 1.21)
+    else:
+        plt.ylim(0, np.max(plot_data_dict[legends[0]]["avg"]) * 1.16)
     plt.xticks(x_pos, x_labels)
-    plt.legend(legends, prop={'size': '17'}, loc=legends_loc)
+    plt.legend(legends, prop={'size': '13'}, loc=legends_loc)
     plt.tick_params(axis='y', labelsize='14')
     plt.tick_params(axis='x', labelsize='16')
     plt.tight_layout()
@@ -80,4 +86,4 @@ if __name__ == "__main__":
     for the_data_set in data_set:
         figname = "nccl_extra_"+the_data_set+".pdf"
         print(figname)
-        plot_bar_avg_errbar(data_dict[the_data_set], "figures_nccl_extra/"+figname, (5, 2.8), 0.15)
+        plot_bar_avg_errbar(data_dict[the_data_set], "figures_nccl_extra/"+figname, (5.2, 3), 0.25, the_data_set)
