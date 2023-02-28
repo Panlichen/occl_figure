@@ -67,17 +67,17 @@ def plot_bar_avg_errbar(data_dict, figname, figsize, bar_width, the_data_set, le
                 yerr=plot_data_dict[legend]["stderr"], error_kw=error_attri,
                 color=color_dict[legend])
         for a, b in zip (pos, plot_data_dict[legend]["avg"]):
-            plt.text(a, b+0.05, "%.1f" % b, ha='center', va='bottom', fontsize=14)
+            plt.text(a, b+0.05, "%.1f" % b, ha='center', va='bottom', fontsize=16)
         
-    plt.ylabel("Time (us)", size="16")
+    plt.ylabel("Training Throughput", size="17")
     # if (the_data_set == data_set[0]):
     #     plt.ylim(0, np.max(plot_data_dict[legends[0]]["avg"]) * 1.21)
     # else:
     #     plt.ylim(0, np.max(plot_data_dict[legends[0]]["avg"]) * 1.16)
     plt.xticks(x_pos, x_labels)
-    plt.legend(legends, prop={'size': '13'}, loc=legends_loc)
-    plt.tick_params(axis='y', labelsize='14')
-    plt.tick_params(axis='x', labelsize='16')
+    plt.legend(legends, prop={'size': '14'}, loc=legends_loc)
+    plt.tick_params(axis='y', labelsize='15')
+    plt.tick_params(axis='x', labelsize='17')
     plt.tight_layout()
     plt.savefig(figname)
     plt.show()
@@ -87,4 +87,4 @@ if __name__ == "__main__":
         figname = "resnet_tp_"+the_data_set+".pdf"
         print(figname)
         plot_bar_avg_errbar(data_dict[the_data_set],
-                             "figures_resnet/"+figname, (5.2, 3), 0.25, the_data_set)
+                             "figures_resnet/"+figname, (5.2, 3), 0.27, the_data_set)
