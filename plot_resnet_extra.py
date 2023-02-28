@@ -55,11 +55,11 @@ def plot_line_bar(data_dict, figsize, bar_width, the_data_set, legends_loc="best
             # plt.bar(x_pos, plot_bar_data_dict[legend], color=color_dict[legend], bottom=-10)
             # , bar_width
             plt.plot(x_pos, plot_bar_data_dict[legend], color=color_dict[legend], linewidth=3)
-    plt.ylabel("# Ctx. Switch", size='18')
+    plt.ylabel("# Ctx.\nSwitch", size='16')
     plt.tick_params(axis='y', labelsize=y_labelsize)
     plt.ylim(-20, 580)
     plt.xticks([])
-    plt.xlabel("IDs of Collectives", size='18')
+    plt.xlabel("IDs of Collectives", size='16')
     # plt.legend([legends[0]], loc=legends_loc, prop={'size': '16'})
     plt.tight_layout()
     plt.savefig(figname)
@@ -75,11 +75,11 @@ def plot_line_bar(data_dict, figsize, bar_width, the_data_set, legends_loc="best
     for i, legend in enumerate(legends):
         if i >= 1:
             plt.plot(x_pos, plot_line_data_dict[legend], color=color_dict[legend], linewidth=3)
-    plt.ylabel("Task Q Len.", size='18')
+    plt.ylabel("Task Q\nLen.", size='16')
     plt.tick_params(axis='y', labelsize=y_labelsize)
     plt.ylim(-1, 40)
     plt.xticks([])
-    plt.xlabel("IDs of Collectives", size='18')
+    plt.xlabel("IDs of Collectives", size='16')
     # plt.legend(legends, loc=legends_loc, prop={'size': '16'})
     plt.tight_layout()
     plt.savefig(figname)
@@ -90,4 +90,4 @@ if __name__ == "__main__":
     # plot_line_bar(data_dict[the_data_set], (5, 3.3), 0.1, the_data_set)
 
     for the_data_set in dataset:
-        plot_line_bar(data_dict[the_data_set], (5, 2), 0.1, the_data_set)
+        plot_line_bar(data_dict[the_data_set], (5, 1.4), 0.1, the_data_set)

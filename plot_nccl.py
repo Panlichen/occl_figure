@@ -315,7 +315,7 @@ data_dict = {
         func[3]: {
             legends[0]: {
                 x_labels[0]: [0.03, 0.03, 0.04],
-                x_labels[1]: [0.04, 0.07, 0.07],
+                x_labels[1]: [0.06, 0.07, 0.07],
                 x_labels[2]: [0.12, 0.14, 0.14],
                 x_labels[3]: [0.26, 0.28, 0.28],
                 x_labels[4]: [0.44, 0.48, 0.52],
@@ -363,7 +363,7 @@ data_dict = {
             },
             legends[2]: {
                 x_labels[0]: [15.48, 14.67, 13.95],
-                x_labels[1]: [24.99, 15.46, 15.05],
+                x_labels[1]: [16.75, 15.46, 15.05],
                 x_labels[2]: [17.44, 14.46, 14.41],
                 x_labels[3]: [15.72, 14.59, 14.54],
                 x_labels[4]: [18.66, 16.92, 15.74],
@@ -1598,8 +1598,8 @@ def plot_line_bar(data_dict, figname, figsize, bar_width, the_data_set, the_func
 
 if __name__ == "__main__":
 
-    # dataset = ["28_8card"]
-    # func = ["R"]
+    dataset = ["16_4card"]
+    func = ["B"]
     for the_data_set in dataset:
         for the_func in func:
             figname = "nccl_"+the_data_set+"_"+the_func+".pdf"

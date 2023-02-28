@@ -56,9 +56,9 @@ def plot_lines(data_dict, figname, figsize, the_data_set="", legends_loc="best")
     x_pos = np.array([i for i in range(len(x_labels))])
     for legend in legends:
         plt.plot(x_pos, plot_line_dict[legend], color=color_dict[legend])
-    plt.legend(legends, prop={'size': '16'}, loc=legends_loc)
+    plt.legend(legends, prop={'size': '13'}, loc=legends_loc)
     plt.ylim(0,np.max(plot_line_dict[legends[0]]) * 1.2)
-    plt.ylabel("Training Throughput", size="16")
+    plt.ylabel("Training\nThroughput", size="16")
     plt.xlabel("Training Iteration", size="16")
     plt.tick_params(axis='y', labelsize="16")
     plt.tick_params(axis='x', labelsize='16')
@@ -70,5 +70,5 @@ if __name__ == "__main__":
     for the_data_set in data_set:
         figname = "figures_vit/vit_"+the_data_set+".pdf"
         print(figname)
-        plot_lines(data_dict[the_data_set], figname, (5, 2.8), the_data_set)
+        plot_lines(data_dict[the_data_set], figname, (5, 2.4), the_data_set)
 
