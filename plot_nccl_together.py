@@ -14,7 +14,7 @@ x_labels = ["512", "1K", "2K", "4K", "8K", "16K", "32K", "64K", "128K", "256K",
 
 dataset = ["2080ti-server, 4 GPUs", "3090-server, 8 GPUs", "3080ti-server 8 GPUs"]
 # dataset = ["16_4card", "27_8card", "28_8acrd"]
-func = ["AR", "AG", "RS", "B", "R"]
+func = ["All-reduce", "All-gather", "Reduce-scatter", "Broadcast", "Reduce"]
 
 data_dict = {
     dataset[0]: {
@@ -1510,8 +1510,8 @@ hatch_dict = {
     legends[1]: "\\"
 }
 
-def plot_line_bar(data_dict, figlabel, figsize, bar_width, legends_loc="best", y_nbins=None, hline=False):
-    plt.figure(figlabel, figsize=figsize) # (11, 4.1)
+def plot_line_bar(ax, data_dict, figlabel, bar_width, legends_loc="upper left", y_nbins=None, hline=False):
+    ax.set_title(figlabel) # (11, 4.1)
 
     plot_bar_data_dict = {}
     plot_line_data_dict = {}
@@ -1542,10 +1542,10 @@ def plot_line_bar(data_dict, figlabel, figsize, bar_width, legends_loc="best", y
 
     # 提前设置：
     x_pos = np.array([i for i in range(len(x_labels))])
-    plt.xlabel("Buffer Size (B)", size='13')
-    plt.xticks(x_pos, x_labels, rotation=5)
-    plt.tick_params(axis='x', labelsize='10')
-    plt.tick_params(axis='y', labelsize='14')
+    ax.set_xlabel("Buffer Size (B)", size='13')
+    ax.set_xticks(x_pos, x_labels, rotation=5)
+    ax.tick_params(axis='x', labelsize='10')
+    ax.tick_params(axis='y', labelsize='14')
 
     # 先画bar
     error_attri = dict(capsize=2)
@@ -1555,26 +1555,29 @@ def plot_line_bar(data_dict, figlabel, figsize, bar_width, legends_loc="best", y
     for i, legend in enumerate(legends):
         if i < 2:
             bars.append(
-                plt.bar(plot_bar.calc_bar_pos(num_bar, x_pos, i, bar_width), plot_bar_data_dict[legend]["avg"], bar_width, yerr=plot_bar_data_dict[legend]["stderr"],
+                ax.bar(plot_bar.calc_bar_pos(num_bar, x_pos, i, bar_width), plot_bar_data_dict[legend]["avg"], bar_width, yerr=plot_bar_data_dict[legend]["stderr"],
                         error_kw=error_attri, fill=False, hatch=hatch_dict[legend], edgecolor=color_dict[legend], zorder=10)
             )
-    plt.ylabel("Algorithm Bandwidth (GB/s)", size="13")
-    plt.yscale("log")
-
-    plt.twinx()
+    #ax.set_ylim(0.008,30)
+    ax.set_ylabel("Algorithm Bandwidth (GB/s)", size="13")
+    ax.set_yscale("log")
+    ax.spines['right'].set_visible(False)
+    ax2=ax.twinx()
 
     # 再画line
     lines = []
     for i, legend in enumerate(legends):
         if i >= 2:
             lines.append(
-                plt.errorbar(x_pos, plot_line_data_dict[legend]["avg"], yerr=plot_line_data_dict[legend]["stderr"], capsize=2, color=color_dict[legend], zorder=100)
+                ax2.errorbar(x_pos, plot_line_data_dict[legend]["avg"], yerr=plot_line_data_dict[legend]["stderr"], capsize=2, color=color_dict[legend], zorder=100)
             )
-    plt.ylabel("End-to-end Latency (us)", size="12")
-    plt.yscale("log")
-
+    
+    #ax2.set_ylim(10,1000000)
+    ax2.set_ylabel("End-to-end Latency (us)", size="12")
+    ax2.set_yscale("log")
+    
     # 共用的操作、参数
-    plt.legend(bars+lines, legends,
+    ax.legend(bars+lines, legends,
                loc=legends_loc, prop={'size': '12'})
 
 if __name__ == "__main__":
@@ -1586,9 +1589,9 @@ if __name__ == "__main__":
         plt.close("all")
         figname = "figures_nccl_together/nccl_"+the_data_set+".pdf"
         print(figname)
-
-        for the_func in func:
-            plot_line_bar(data_dict[the_data_set][the_func], the_func, (11, 3.1), 0.3)
+        fig, axes = plt.subplots(5, 1, figsize=(11, 15.5))
+        for index,the_func in enumerate(func):
+            plot_line_bar(axes[index],data_dict[the_data_set][the_func], the_data_set+" "+the_func, 0.3)
         plt.tight_layout()
         plt.savefig(figname)
-        plt.show()
+        #plt.show()
