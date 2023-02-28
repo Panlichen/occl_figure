@@ -1558,7 +1558,6 @@ def plot_line_bar(data_dict, figname, figsize, bar_width, the_data_set, the_func
     plt.xticks(x_pos, x_labels_slice) #, rotation=5
     plt.tick_params(axis='x', labelsize='17')
     y_labelsize = '16'
-    plt.tick_params(axis='y', labelsize=y_labelsize)
 
     # 先画bar
     error_attri = dict(capsize=2)
@@ -1573,6 +1572,7 @@ def plot_line_bar(data_dict, figname, figsize, bar_width, the_data_set, the_func
             )
     if (the_data_set == "16_4card"):
         plt.ylabel("Bandwidth (GB/s)", size="21")
+    plt.tick_params(axis='y', labelsize=y_labelsize)
     plt.yscale("log")
 
     plt.twinx()
@@ -1599,7 +1599,7 @@ def plot_line_bar(data_dict, figname, figsize, bar_width, the_data_set, the_func
 if __name__ == "__main__":
 
     # dataset = ["28_8card"]
-    func = ["R"]
+    # func = ["R"]
     for the_data_set in dataset:
         for the_func in func:
             figname = "nccl_"+the_data_set+"_"+the_func+".pdf"
