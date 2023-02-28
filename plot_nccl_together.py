@@ -1594,4 +1594,4 @@ if __name__ == "__main__":
             plot_line_bar(axes[index],data_dict[the_data_set][the_func], the_data_set+" "+the_func, 0.3)
         plt.tight_layout()
         plt.savefig(figname)
-        #plt.show()
+        plt.show()
