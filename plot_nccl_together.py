@@ -12,7 +12,8 @@ legends = ["NCCL Bandwidth", "OCCL Bandwidth", "NCCL Latency", "OCCL Latency"]
 x_labels = ["512", "1K", "2K", "4K", "8K", "16K", "32K", "64K", "128K", "256K",
             "512K", "1M", "2M", "4M", "8M", "16M", "32M", "64M", "128M", "256M", "512M", "1G"]
 
-dataset = ["2080ti-server, 4 GPUs", "3090-server, 8 GPUs", "3080ti-server 8 GPUs"]
+dataset = ["4_2080ti", "8_3090", "8_3080ti"]
+# dataset = ["2080ti-server, 4 GPUs", "3090-server, 8 GPUs", "3080ti-server 8 GPUs"]
 # dataset = ["16_4card", "27_8card", "28_8acrd"]
 func = ["All-reduce", "All-gather", "Reduce-scatter", "Broadcast", "Reduce"]
 
@@ -1587,7 +1588,8 @@ if __name__ == "__main__":
     for the_data_set in dataset:
 
         plt.close("all")
-        figname = "figures_nccl_together/nccl_"+the_data_set+".pdf"
+        # figname = "figures_nccl_together/nccl_"+the_data_set+".pdf"
+        figname = "figures_nccl_together/nccl_"+the_data_set+".png"
         print(figname)
         fig, axes = plt.subplots(5, 1, figsize=(11, 15.5))
         for index,the_func in enumerate(func):
